@@ -2,6 +2,7 @@ from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
 import models, schemas
 from database import SessionLocal, engine, Base
+from typing import List
 
 # Create DB tables
 Base.metadata.create_all(bind=engine)
@@ -24,7 +25,7 @@ def create_task(task: schemas.TaskCreate, db: Session = Depends(get_db)):
     db.refresh(db_task)
     return db_task
 
-@app.get("/tasks/", response_model=list[schemas.TaskOut])
+@app.get("/tasks/", response_model=List[schemas.TaskOut])
 def read_tasks(db: Session = Depends(get_db)):
     return db.query(models.Task).all()
 
